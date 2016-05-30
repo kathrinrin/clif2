@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="patients" type="MySQL - 5.1.44">
+   <tables>
+      <table name="Diagnosis" numRows="30440" remarks="" type="TABLE">
+         <column autoUpdated="true" digits="0" id="0" name="diagnosisid" nullable="false" remarks="" size="10" type="INT">
+            <child column="Reason_for_procedure_diagnosisid" foreignKey="procedure_undertaken_ibfk_2" implied="false" onDeleteCascade="false" table="Procedure_undertaken"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="patientid" nullable="false" remarks="" size="10" type="INT">
+            <parent column="patientid" foreignKey="diagnosis_ibfk_1" implied="false" onDeleteCascade="false" table="Patient"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="Diagnosis_snomedctconceptid" nullable="false" remarks="" size="10" type="INT"/>
+         <primaryKey column="diagnosisid" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="diagnosisid"/>
+         </index>
+         <index name="patientid" unique="false">
+            <column ascending="true" name="patientid"/>
+         </index>
+      </table>
+      <table name="DSCA" numRows="30430" remarks="" type="TABLE">
+         <column autoUpdated="true" digits="0" id="0" name="dscaid" nullable="false" remarks="" size="10" type="INT"/>
+         <column autoUpdated="false" digits="0" id="1" name="patientid" nullable="false" remarks="" size="10" type="INT">
+            <parent column="patientid" foreignKey="dsca_ibfk_1" implied="false" onDeleteCascade="false" table="Patient"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="procedureid" nullable="false" remarks="" size="10" type="INT">
+            <parent column="procedureid" foreignKey="dsca_ibfk_2" implied="false" onDeleteCascade="false" table="Procedure_undertaken"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="datadelivered" nullable="false" remarks="" size="0" type="BIT"/>
+         <primaryKey column="dscaid" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="dscaid"/>
+         </index>
+         <index name="patientid" unique="false">
+            <column ascending="true" name="patientid"/>
+         </index>
+         <index name="procedureid" unique="false">
+            <column ascending="true" name="procedureid"/>
+         </index>
+      </table>
+      <table name="Patient" numRows="28998" remarks="" type="TABLE">
+         <column autoUpdated="true" digits="0" id="0" name="patientid" nullable="false" remarks="" size="10" type="INT">
+            <child column="patientid" foreignKey="diagnosis_ibfk_1" implied="false" onDeleteCascade="false" table="Diagnosis"/>
+            <child column="patientid" foreignKey="dsca_ibfk_1" implied="false" onDeleteCascade="false" table="DSCA"/>
+            <child column="patientid" foreignKey="patient_admission_ibfk_1" implied="false" onDeleteCascade="false" table="Patient_admission"/>
+            <child column="patientid" foreignKey="procedure_undertaken_ibfk_1" implied="false" onDeleteCascade="false" table="Procedure_undertaken"/>
+            <child column="patientid" foreignKey="tumour_lymph_node_metastases_ibfk_1" implied="false" onDeleteCascade="false" table="Tumour_Lymph_node_metastases"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="Date_of_Birth" nullable="false" remarks="" size="19" type="DATETIME"/>
+         <primaryKey column="patientid" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="patientid"/>
+         </index>
+      </table>
+      <table name="Patient_admission" numRows="27541" remarks="" type="TABLE">
+         <column autoUpdated="true" digits="0" id="0" name="admissionid" nullable="false" remarks="" size="10" type="INT"/>
+         <column autoUpdated="false" digits="0" id="1" name="patientid" nullable="false" remarks="" size="10" type="INT">
+            <parent column="patientid" foreignKey="patient_admission_ibfk_1" implied="false" onDeleteCascade="false" table="Patient"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="procedureid" nullable="false" remarks="" size="10" type="INT">
+            <parent column="procedureid" foreignKey="patient_admission_ibfk_2" implied="false" onDeleteCascade="false" table="Procedure_undertaken"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="Admit_date/time" nullable="false" remarks="" size="19" type="DATETIME"/>
+         <column autoUpdated="false" digits="0" id="4" name="Discharge_date/time" nullable="false" remarks="" size="19" type="DATETIME"/>
+         <primaryKey column="admissionid" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="admissionid"/>
+         </index>
+         <index name="patientid" unique="false">
+            <column ascending="true" name="patientid"/>
+         </index>
+         <index name="procedureid" unique="false">
+            <column ascending="true" name="procedureid"/>
+         </index>
+      </table>
+      <table name="Procedure_undertaken" numRows="71753" remarks="" type="TABLE">
+         <column autoUpdated="true" digits="0" id="0" name="procedureid" nullable="false" remarks="" size="10" type="INT">
+            <child column="procedureid" foreignKey="dsca_ibfk_2" implied="false" onDeleteCascade="false" table="DSCA"/>
+            <child column="procedureid" foreignKey="patient_admission_ibfk_2" implied="false" onDeleteCascade="false" table="Patient_admission"/>
+            <child column="procedureid" foreignKey="tumour_lymph_node_metastases_ibfk_2" implied="false" onDeleteCascade="false" table="Tumour_Lymph_node_metastases"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="patientid" nullable="false" remarks="" size="10" type="INT">
+            <parent column="patientid" foreignKey="procedure_undertaken_ibfk_1" implied="false" onDeleteCascade="false" table="Patient"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="Reason_for_procedure_diagnosisid" nullable="true" remarks="" size="10" type="INT">
+            <parent column="diagnosisid" foreignKey="procedure_undertaken_ibfk_2" implied="false" onDeleteCascade="false" table="Diagnosis"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="Procedure_snomedctconceptid" nullable="false" remarks="" size="10" type="INT"/>
+         <column autoUpdated="false" digits="0" id="4" name="Date_and_time_performed" nullable="false" remarks="" size="19" type="DATETIME"/>
+         <primaryKey column="procedureid" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="procedureid"/>
+         </index>
+         <index name="diagnosisid" unique="false">
+            <column ascending="true" name="Reason_for_procedure_diagnosisid"/>
+         </index>
+         <index name="patientid" unique="false">
+            <column ascending="true" name="patientid"/>
+         </index>
+      </table>
+      <table name="Tumour_Lymph_node_metastases" numRows="22323" remarks="" type="TABLE">
+         <column autoUpdated="true" digits="0" id="0" name="lymphnodesid" nullable="false" remarks="" size="10" type="INT"/>
+         <column autoUpdated="false" digits="0" id="1" name="patientid" nullable="false" remarks="" size="10" type="INT">
+            <parent column="patientid" foreignKey="tumour_lymph_node_metastases_ibfk_1" implied="false" onDeleteCascade="false" table="Patient"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="procedureid" nullable="false" remarks="" size="10" type="INT">
+            <parent column="procedureid" foreignKey="tumour_lymph_node_metastases_ibfk_2" implied="false" onDeleteCascade="false" table="Procedure_undertaken"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="Number_of_nodes_examined" nullable="false" remarks="" size="10" type="INT"/>
+         <primaryKey column="lymphnodesid" sequenceNumberInPK="1"/>
+         <index name="PRIMARY" unique="true">
+            <column ascending="true" name="lymphnodesid"/>
+         </index>
+         <index name="patientid" unique="false">
+            <column ascending="true" name="patientid"/>
+         </index>
+         <index name="procedureid" unique="false">
+            <column ascending="true" name="procedureid"/>
+         </index>
+      </table>
+   </tables>
+</database>

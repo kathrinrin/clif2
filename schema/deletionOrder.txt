@@ -1,0 +1,6 @@
+Tumour_Lymph_node_metastases
+Patient_admission
+DSCA
+Procedure_undertaken
+Diagnosis
+Patient
